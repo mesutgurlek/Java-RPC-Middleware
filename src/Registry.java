@@ -1,10 +1,21 @@
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.HashMap;
 
 public class Registry {
 
+	private static HashMap<String, RemoteObjectReference> lookupTable = new HashMap<>();
+
 	public Registry() {
 
+	}
+
+	public static HashMap<String, RemoteObjectReference> getLookupTable() {
+		return lookupTable;
+	}
+
+	public static void setLookupTable(HashMap<String, RemoteObjectReference> lookupTable) {
+		Registry.lookupTable = lookupTable;
 	}
 
 	public void runRegistrySystem(int port) {
@@ -25,6 +36,7 @@ public class Registry {
 			e.printStackTrace();
 		}	
 	}
+
 
 	public static void main(String []args) {
 		int portNo = Integer.parseInt(args[0]);
