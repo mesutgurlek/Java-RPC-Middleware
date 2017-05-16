@@ -9,6 +9,8 @@ public class RegistryRequestHandler extends Thread {
     private HashMap<String, RemoteObjectReference> table;
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
+
+
     public RegistryRequestHandler(Socket inSocket) {
         table = Registry.getLookupTable();
         this.inSocket = inSocket;
@@ -43,6 +45,7 @@ public class RegistryRequestHandler extends Thread {
 
         return remoteObjectReference;
     }
+
 
     public synchronized void listAllObjects() {
         System.out.println(table.toString());

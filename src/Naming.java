@@ -37,9 +37,10 @@ public class Naming {
         } catch (Exception e) {
 
         }
+        return null;
     }
 
-    public static RemoteObjectReference bind(Object obj, String name, String IP, int portNo) {
+    public static Object bind(Object obj, String name, String IP, int portNo) {
         try {
             Socket registrySocket = new Socket(IP, portNo);
             // create streams for registry communication
@@ -54,20 +55,22 @@ public class Naming {
             RemoteObjectReference remoteObjectReference = (RemoteObjectReference)inputStream.readObject();
 
             if(remoteObjectReference == null) {
-                System.out.println("Object is not found");
+                System.out.println("Binding error (null return)");
                 return null;
             }
             else {
                 String className = remoteObjectReference.getClassName();
-                /* TODO create a stub with using this class name
-                 TODO use parameter of remoteObjRef to connect stup to server
-                 TODO then return that stub */
+                /* TODO create a skeleton with using this class name
+                 TODO use parameter of remoteObjRef to connect skeleton to server
+                 TODO then return that skeleton */
             }
 
 
         } catch (Exception e) {
 
         }
+        return null;
     }
+
 
 }
