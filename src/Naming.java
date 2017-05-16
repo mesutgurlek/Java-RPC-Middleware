@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -16,7 +15,7 @@ public class Naming {
             ObjectInputStream inputStream = new ObjectInputStream(registrySocket.getInputStream());
 
             // create a msg to send to registry server
-            RegistryMessage message = new RegistryMessage(MessageType.LOOKUP, name);
+            RegistryMessage message = new RegistryMessage(RegistryMessageType.LOOKUP, name);
             // send msg
             outputStream.writeObject(message);
             // receive msg (reference)
@@ -48,7 +47,7 @@ public class Naming {
             ObjectInputStream inputStream = new ObjectInputStream(registrySocket.getInputStream());
 
             // create a msg to send to registry server
-            RegistryMessage message = new RegistryMessage(MessageType.BIND, name, obj, portNo);
+            RegistryMessage message = new RegistryMessage(RegistryMessageType.BIND, name, obj, portNo);
             // send msg
             outputStream.writeObject(message);
             // receive msg (reference)

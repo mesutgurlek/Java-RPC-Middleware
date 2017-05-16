@@ -1,7 +1,6 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
 
@@ -18,7 +17,7 @@ public class ClientTest {
             Socket socket = new Socket("localhost", port);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            RegistryMessage message = new RegistryMessage(MessageType.BIND, name, o, 500);
+            RegistryMessage message = new RegistryMessage(RegistryMessageType.BIND, name, o, 500);
             out.writeObject(message);
             // get the remote object reference from the registry
             RemoteObjectReference ror = (RemoteObjectReference)in.readObject();
