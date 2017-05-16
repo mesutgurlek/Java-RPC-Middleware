@@ -35,7 +35,7 @@ public class ClientCommunicationModule {
         }
     }
     public Message receiveMessage() {
-
+        return null;
     }
 
 }
