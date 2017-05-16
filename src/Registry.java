@@ -20,12 +20,16 @@ public class Registry {
 
 	public void runRegistrySystem(int port) {
 		try {
+
 			// create socket for the incoming requests
 			ServerSocket regServer = new ServerSocket(port);
 			System.out.println("Registry server is listening at port " + port + ":");
 
 			// listen all requests and create a thread to handle that
 			while(true) {
+				// TODO debug delete later
+				System.out.println(lookupTable.toString());
+
 				Socket incomingCon = regServer.accept();
 				// this thread will handle all requests from specific client
 				new RegistryRequestHandler(incomingCon).start(); 
