@@ -18,9 +18,9 @@ public class RemoteObjectReference implements Serializable {
         this.name = message.getName();
         this.className = message.getObject().getClass().getCanonicalName();
         // TODO skeloton logic -- if(impName.endsWith("Skeleton")){
-        if(this.className.contains("Skeleton")) {
-            this.className = this.className.replace("Skeleton", "");
-        }
+        //if(this.className.contains("Skeleton")) {
+        //   this.className = this.className.replace("Skeleton", "");
+        //}
         this.port = port;
         this.address = addr;
         uniqueID = UUID.randomUUID(); // create unique ID for every reference

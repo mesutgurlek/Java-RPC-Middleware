@@ -56,7 +56,7 @@ public class RegistryRequestHandler extends Thread {
             RegistryMessage message = (RegistryMessage) inputStream.readObject();
 
             switch (message.getType()) {
-                case REBIND:
+                case BIND:
                     RemoteObjectReference remoteObjectReference = bind(message);
                     outputStream.writeObject(remoteObjectReference);
                     break;

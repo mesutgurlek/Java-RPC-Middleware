@@ -18,7 +18,7 @@ public class ClientTest {
             Socket socket = new Socket("localhost", port);
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            RegistryMessage message = new RegistryMessage(MessageType.REBIND, name, o, 500);
+            RegistryMessage message = new RegistryMessage(MessageType.BIND, name, o, 500);
             out.writeObject(message);
             // get the remote object reference from the registry
             RemoteObjectReference ror = (RemoteObjectReference)in.readObject();

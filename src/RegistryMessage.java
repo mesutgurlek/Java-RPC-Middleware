@@ -9,11 +9,17 @@ public class RegistryMessage implements Serializable {
     private Object object;
     private int port;
 
+    // constructor to create binding message
     public RegistryMessage(MessageType type, String name, Object object, int port) {
         this.setType(type);
         this.setName(name);
         this.setObject(object);
         this.setPort(port);
+    }
+    // constructor to create lookup message
+    public RegistryMessage(MessageType type, String name) {
+        this.setType(type);
+        this.setName(name);
     }
 
     public MessageType getType() {
