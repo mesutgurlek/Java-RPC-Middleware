@@ -47,7 +47,7 @@ public class ServerCommunicationHandler extends Thread{
         Message message = null;
         try {
             message = (Message) inputStream.readObject();
-            //TODO message =  dispatch.dispatchMessage(message);
+            message =  new Dispatcher().dispatch(message);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

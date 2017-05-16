@@ -6,8 +6,8 @@ import java.net.Socket;
  * Created by aeakdogan on 16/05/2017.
  * ${CLASS}
  */
-public class ServerCommunication {
-    public ServerCommunication() {
+public class ServerCommunicationModule {
+    public ServerCommunicationModule() {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(6000);
