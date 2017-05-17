@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Vector;
 
 /**
  * Created by aeakdogan on 16/05/2017.
@@ -10,7 +11,7 @@ public class Message implements Serializable {
     MessageType messageType;
     RemoteObjectReference remoteObjectReference;
     String methodName;
-    ArrayList<Object> arguments;
+    Vector<Object> arguments;
 
     public int getId() {
         return id;
@@ -44,11 +45,11 @@ public class Message implements Serializable {
         this.methodName = methodName;
     }
 
-    public ArrayList<Object> getArguments() {
+    public Vector<Object> getArguments() {
         return arguments;
     }
 
-    public void setArguments(ArrayList<Object> arguments) {
+    public void setArguments(Vector<Object> arguments) {
         this.arguments = arguments;
     }
 }
