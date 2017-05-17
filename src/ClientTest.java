@@ -12,9 +12,14 @@ public class ClientTest {
         Scanner scan = new Scanner(System.in);
         int port = Integer.parseInt(args[0]);
 
+
         CalculatorInterfaceStub stub = (CalculatorInterfaceStub)Naming.lookup("object", "localhost",  6000);
         System.out.println(stub.ror.getAddress() + "-" + stub.ror.getPort());
-        System.out.println(stub.add(50, 60));
-        System.out.println(stub.add(50, 80));
+        while(true) {
+            int i1 = scan.nextInt();
+            int i2 = scan.nextInt();
+            System.out.println("result: " + stub.add(i1, i2));
+        }
+
     }
 }

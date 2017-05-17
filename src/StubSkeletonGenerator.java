@@ -90,7 +90,7 @@ public class StubSkeletonGenerator {
         int stubModifier = stubInterface.getModifiers();
         stubModifier = stubModifier - Modifier.INTERFACE - Modifier.ABSTRACT;
         generatedCode.append(Modifier.toString(stubModifier));
-        generatedCode.append(" class " + this.interfaceName + fileType);
+        generatedCode.append(" class " + this.interfaceName + fileType + " implements " + interfaceName);
         generatedCode.append(" {\n\n");
     }
 
