@@ -30,6 +30,7 @@ public class Naming {
                 /* TODO create a stub with using this class name
                  TODO use parameter of remoteObjRef to connect stup to server
                  TODO then return that stub */
+
             }
 
 
