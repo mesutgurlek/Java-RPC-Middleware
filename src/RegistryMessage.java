@@ -4,23 +4,29 @@ import java.io.Serializable;
  * Created by cagri on 15.05.2017.
  */
 public class RegistryMessage implements Serializable {
-    private MessageType type;
+    private RegistryMessageType type;
     private String name;
     private Object object;
     private int port;
 
-    public RegistryMessage(MessageType type, String name, Object object, int port) {
+    // constructor to create binding message
+    public RegistryMessage(RegistryMessageType type, String name, Object object, int port) {
         this.setType(type);
         this.setName(name);
         this.setObject(object);
         this.setPort(port);
     }
+    // constructor to create lookup message
+    public RegistryMessage(RegistryMessageType type, String name) {
+        this.setType(type);
+        this.setName(name);
+    }
 
-    public MessageType getType() {
+    public RegistryMessageType getType() {
         return type;
     }
 
-    public void setType(MessageType type) {
+    public void setType(RegistryMessageType type) {
         this.type = type;
     }
 

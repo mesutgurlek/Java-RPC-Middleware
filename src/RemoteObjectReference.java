@@ -16,9 +16,12 @@ public class RemoteObjectReference implements Serializable {
 
     public RemoteObjectReference(RegistryMessage message, InetAddress addr) {
         this.name = message.getName();
-        this.className = message.getObject().getClass().getCanonicalName();
+        this.className = message.getObject().getClass().getInterfaces()[0].getName();
         // TODO skeloton logic -- if(impName.endsWith("Skeleton")){
-        this.port = port;
+        //if(this.className.contains("Skeleton")) {
+        //   this.className = this.className.replace("Skeleton", "");
+        //}
+        this.port = message.getPort();
         this.address = addr;
         uniqueID = UUID.randomUUID(); // create unique ID for every reference
     }
@@ -69,5 +72,35 @@ public class RemoteObjectReference implements Serializable {
 
     public void setAddress(InetAddress address) {
         this.address = address;
+    }
+
+    public int hashCode(){
+        int hashCode = 17;
+        hashCode = 37 * hashCode + name.hashCode();
+        hashCode = 37 * hashCode + address.hashCode();
+        hashCode = 37 * hashCode + port;
+        return hashCode;
+    }
+
+    /**
+     * Compares if two RemoteObjectReferences are equal.
+     * @param o the object to compare for equality.
+     * @return boolean Returns true if two RemoteObjectReferences are equal.
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object o){
+        if((o != null) && (this.getClass() == o.getClass())){
+            RemoteObjectReference ror = (RemoteObjectReference)o;
+            if((port == ror.getPort()) &&
+                    (address.equals(ror.getAddress()) &&
+                            (name.equals(ror.getName())))){
+                return true;
+            }
+            else{
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }
