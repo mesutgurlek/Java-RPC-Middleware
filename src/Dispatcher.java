@@ -8,11 +8,14 @@ import java.lang.reflect.Method;
 public class Dispatcher {
     public Message dispatch(Message message){
         RemoteObjectReference remoteObjectReference = message.getRemoteObjectReference();
-
+        System.out.println(remoteObjectReference.getClassName());
         RemoteReferenceModuleServer remoteReferenceModuleServer = RemoteReferenceModuleServer.getServerRemoteReference();
+        System.out.println(remoteReferenceModuleServer.remoteObjectReferenceObjectHashMap.toString());
+        System.out.println(remoteObjectReference);
 
         Object skeleton = remoteReferenceModuleServer.getObjectReference(remoteObjectReference);
-
+        System.out.println(skeleton);
+        System.out.println("dispatch: " + skeleton.getClass().toString());
         for(Method method: skeleton.getClass().getMethods()){
             if(method.getName().equals(message.getMethodName())){
                 try {

@@ -14,7 +14,7 @@ public class ServerCommunicationModule {
     }
 
 
-    public ServerCommunicationModule() {
+    public void runServer() {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(port);

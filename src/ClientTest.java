@@ -11,17 +11,10 @@ public class ClientTest {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
         int port = Integer.parseInt(args[0]);
-        while(true) {
-            String name = scan.next();
-            String o = new String();
-            Socket socket = new Socket("localhost", port);
-            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-            RegistryMessage message = new RegistryMessage(RegistryMessageType.BIND, name, o, 500);
-            out.writeObject(message);
-            // get the remote object reference from the registry
-            RemoteObjectReference ror = (RemoteObjectReference)in.readObject();
 
-        }
+        CalculatorInterfaceStub stub = (CalculatorInterfaceStub)Naming.lookup("object", "localhost",  6000);
+        System.out.println(stub.ror.getAddress() + "-" + stub.ror.getPort());
+        System.out.println(stub.add(50, 60));
+        System.out.println(stub.add(50, 80));
     }
 }

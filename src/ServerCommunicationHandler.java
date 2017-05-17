@@ -22,6 +22,9 @@ public class ServerCommunicationHandler extends Thread{
         try {
             inputStream = new ObjectInputStream(clientSocket.getInputStream());
             outputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+            Message m = this.receiveMessage();
+            System.out.println("method name: " + m.getMethodName());
+            this.sendMessage(m);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -6,7 +6,7 @@ import java.util.HashMap;
  */
 public class RemoteReferenceModuleServer {
     private static RemoteReferenceModuleServer remoteReferenceModuleServer;
-    private HashMap<RemoteObjectReference, Object> remoteObjectReferenceObjectHashMap;
+    public HashMap<RemoteObjectReference, Object> remoteObjectReferenceObjectHashMap;
 
     //SINGLETON PATTERN
     public static synchronized RemoteReferenceModuleServer getServerRemoteReference(){

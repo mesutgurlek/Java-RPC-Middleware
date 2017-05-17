@@ -31,7 +31,7 @@ public class Naming {
                 return null;
             }
             else {
-                String className = remoteObjectReference.getClassName();
+                String className = remoteObjectReference.getClassName(); // CalculatorInterface
                 /* TODO create a stub with using this class name
                  TODO use parameter of remoteObjRef to connect stup to server
                  TODO then return that stub */
@@ -84,7 +84,8 @@ public class Naming {
                 return null;
             }
             else {
-                String className = remoteObjectReference.getClassName();
+                String className = remoteObjectReference.getClassName(); // EX. CalculatorInterface
+                System.out.println("Binding: " + className);
                 /* TODO create a skeleton with using this class name
                  TODO use parameter of remoteObjRef to connect skeleton to server
                  TODO then return that skeleton */
