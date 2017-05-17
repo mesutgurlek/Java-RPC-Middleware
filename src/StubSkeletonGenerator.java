@@ -255,29 +255,29 @@ public class StubSkeletonGenerator {
 
             // check for ls failure
 
-            try {
-                if (proc.waitFor() != 0) {
-                    System.err.println("exit value = " +
-                            proc.exitValue());
-                    if(proc.exitValue() > 0){
-                        System.err.println("Failed to compile " + fileName);
-                        System.exit(1);
-                    }
-                }
-            }
-            catch (InterruptedException e) {
-                System.err.println(e);
-            }
+//            try {
+//                if (proc.waitFor() != 0) {
+//                    System.err.println("exit value = " +
+//                            proc.exitValue());
+//                    if(proc.exitValue() > 0){
+//                        System.err.println("Failed to compile " + fileName);
+//                        System.exit(1);
+//                    }
+//                }
+//            }
+//            catch (InterruptedException e) {
+//                System.err.println(e);
+//            }
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
-        // move the file to the correct location in the directory
-        String dir = "src/";
-        moveFile(fileName, dir);
-        String classOut = fileName.replace(".java", ".class");
-        StubSkeletonGenerator.moveFile(classOut, dir);
+//        // move the file to the correct location in the directory
+//        String dir = "src/";
+//        moveFile(fileName, dir);
+//        String classOut = fileName.replace(".java", ".class");
+//        StubSkeletonGenerator.moveFile(classOut, dir);
     }
 
     private void generateSkeleton(String interfaceName){
@@ -312,7 +312,6 @@ public class StubSkeletonGenerator {
         generatedCode.append("\tprivate RemoteObjectReference ror;\n\n");
         generatedCode.append("\tprivate RemoteReferenceModuleServer serverModule;\n\n");
         generatedCode.append("\tprivate " +  interfaceName + " remoteObject;\n");
-        generatedCode.append("}");
     }
 
     private void generateSkeletonConstructor(String filename){
@@ -423,6 +422,7 @@ public class StubSkeletonGenerator {
             generatedCode.append("\t\treturn message;\n");
             generatedCode.append("\t}\n\n");
         }
+        generatedCode.append("}");
     }
 
 }
