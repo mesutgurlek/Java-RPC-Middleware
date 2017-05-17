@@ -42,7 +42,7 @@ public class StubSkeletonGenerator {
         try{
             File file = new File(fileToMove);
             // Destination directory
-            File dir = new File("nathan/middleware");
+            File dir = new File(destinationDirectory);
             // Move file to new directory
             boolean success = file.renameTo(new File(dir, file.getName()));
             if (!success) {
@@ -274,8 +274,8 @@ public class StubSkeletonGenerator {
         }
 
 //        // move the file to the correct location in the directory
-//        String dir = "src/";
-//        moveFile(fileName, dir);
+        String dir = "src/";
+        moveFile(fileName, dir);
 //        String classOut = fileName.replace(".java", ".class");
 //        StubSkeletonGenerator.moveFile(classOut, dir);
     }
@@ -308,7 +308,7 @@ public class StubSkeletonGenerator {
 
     private void generateSkeletonVariables(){
         generatedCode.append("\t/*     private data members          */\n\n");
-        generatedCode.append("\tprivate ServerCommunication comm;\n\n");
+        generatedCode.append("\tprivate ServerCommunicationModule comm;\n\n");
         generatedCode.append("\tprivate RemoteObjectReference ror;\n\n");
         generatedCode.append("\tprivate RemoteReferenceModuleServer serverModule;\n\n");
         generatedCode.append("\tprivate " +  interfaceName + " remoteObject;\n");
@@ -319,8 +319,8 @@ public class StubSkeletonGenerator {
         generatedCode.append("\t\tthis.remoteObject = (" + interfaceName + ")remoteObject;\n");
         generatedCode.append("\t\tint remoteObjectPort = ror.getPort();\n");
         generatedCode.append("\t\tserverModule = RemoteReferenceModuleServer.getServerRemoteReference();\n");
-        generatedCode.append("\t\tserverModule.addReference(ror, this);\n");
-        generatedCode.append("\t\tcomm = new ServerCommunication(remoteObjectPort);\n");
+        generatedCode.append("\t\tserverModule.addObjectReference(ror, this);\n");
+        generatedCode.append("\t\tcomm = new ServerCommunicationModule(remoteObjectPort);\n");
         generatedCode.append("\t}\n\n");
     }
 

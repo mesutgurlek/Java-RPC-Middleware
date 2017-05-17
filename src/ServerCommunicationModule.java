@@ -7,10 +7,17 @@ import java.net.Socket;
  * ${CLASS}
  */
 public class ServerCommunicationModule {
+    int port;
+
+    public ServerCommunicationModule(int port) {
+        this.port = port;
+    }
+
+
     public ServerCommunicationModule() {
         ServerSocket serverSocket = null;
         try {
-            serverSocket = new ServerSocket(6000);
+            serverSocket = new ServerSocket(port);
 
             System.out.println("Server Communication Started");
             while (true) {
