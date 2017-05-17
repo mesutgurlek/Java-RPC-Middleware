@@ -27,15 +27,41 @@ public class ClientCommunicationModule {
             InetAddress address = remoteObjectReference.getAddress();
             int port = remoteObjectReference.getPort();
 
-            Socket socket = new Socket(address, port);
+            serverSocket = new Socket(address, port);
+            outputStream = new ObjectOutputStream(serverSocket.getOutputStream());
+            inputStream = new ObjectInputStream(serverSocket.getInputStream());
 
+            message.setMessageType(MessageType.REQUEST);
+            outputStream.writeObject(message);
 
         } catch (Exception e) {
-
+            System.out.println("Connection erorr");
+            e.printStackTrace();
         }
     }
     public Message receiveMessage() {
-        return null;
+        Message message = null;
+        try {
+            message = (Message)inputStream.readObject();
+
+            if(message.getMessageType() == MessageType.CLOSE){
+                System.out.println("No more active objects: All server down");
+                System.exit(0);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                inputStream.close();
+                outputStream.close();
+                serverSocket.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return message;
     }
 
 }
