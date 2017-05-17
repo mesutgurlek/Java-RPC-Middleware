@@ -14,6 +14,7 @@ import java.lang.reflect.Modifier;
 
 public class StubSkeletonGenerator {
     private Class stubInterface;
+    private Class skeletonInterface;
     private Method methods[];
     private StringBuffer generatedCode;
     private String interfaceName;
@@ -31,9 +32,26 @@ public class StubSkeletonGenerator {
         StubSkeletonGenerator stub = new StubSkeletonGenerator();
         stub.generateStub(interf);
 
-//        // Create skeleton
-//        StubSkeletonGenerator skel = new StubSkeletonGenerator();
-//        skel.generateSkeleton(interf);
+        // Create skeleton
+        StubSkeletonGenerator skel = new StubSkeletonGenerator();
+        skel.generateSkeleton(interf);
+    }
+
+    //  move the file to the correct place in the filesystem
+    private static void moveFile(String fileToMove, String destinationDirectory){
+        try{
+            File file = new File(fileToMove);
+            // Destination directory
+            File dir = new File("nathan/middleware");
+            // Move file to new directory
+            boolean success = file.renameTo(new File(dir, file.getName()));
+            if (!success) {
+                System.err.println("Error unbale to move file");
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private StubSkeletonGenerator() {
@@ -92,7 +110,7 @@ public class StubSkeletonGenerator {
         generatedCode.append("\t\tthis.ror = ror;\n");
         generatedCode.append("\t\tInetAddress remoteObjectAddress = ror.getAddress();\n");
         generatedCode.append("\t\tint remoteObjectPort = ror.getPort();\n");
-        generatedCode.append("\t\tcomm = new ClientCommunicationModule(remoteObjectAddress, remoteObjectPort);\n");
+        generatedCode.append("\t\tcomm = new ClientCommunicationModule();\n");
 //        generatedCode.append("\t\tclientModule = RemoteReferenceModuleClient.getClientRemoteReference();\n");
 //        generatedCode.append("\t\tclientModule.addReference(ror, stub);\n");
         generatedCode.append("\t}\n\n");
@@ -177,7 +195,7 @@ public class StubSkeletonGenerator {
             generatedCode.append("\t\tcomm.sendMessage(message);\n");
             if (!methods[i].getReturnType().getName().equals("void")) {
                 generatedCode.append("\n\t\t// Get the message returned from the Server\n");
-                generatedCode.append("\t\tmessage = comm.getMessage();\n");
+                generatedCode.append("\t\tmessage = comm.receiveMessage();\n");
                 generatedCode.append("\t\tVector returnedFromServer = message.getArguments();\n");
                 if (methods[i].getReturnType().getName().equals("int")) {
                     generatedCode.append("\t\tInteger returnType = " + "(Integer) "
@@ -253,6 +271,157 @@ public class StubSkeletonGenerator {
         }
         catch (IOException e) {
             e.printStackTrace();
+        }
+
+        // move the file to the correct location in the directory
+        String dir = "src/";
+        moveFile(fileName, dir);
+        String classOut = fileName.replace(".java", ".class");
+        StubSkeletonGenerator.moveFile(classOut, dir);
+    }
+
+    private void generateSkeleton(String interfaceName){
+        generatedCode = new StringBuffer();
+        this.interfaceName = interfaceName;
+        String filename = interfaceName + "Skeleton";
+        generateHeader();
+        generateSkeletonClassDefinition("Skeleton");
+        generateSkeletonVariables();
+        generateSkeletonConstructor(filename);
+        generateSkeletonMethods();
+        writeToFile(filename + ".java");
+    }
+
+    private void generateSkeletonClassDefinition(String fileType){
+        try{
+            skeletonInterface = Class.forName(this.interfaceName);
+        }catch (ClassNotFoundException e){
+            System.err.println("Got Error: " + e.toString());
+        }
+
+        int skeletonModifier = skeletonInterface.getModifiers();
+        skeletonModifier = skeletonModifier - Modifier.INTERFACE - Modifier.ABSTRACT;
+        generatedCode.append(Modifier.toString(skeletonModifier));
+        generatedCode.append(" class " + this.interfaceName + fileType);
+        generatedCode.append(" {\n\n");
+    }
+
+    private void generateSkeletonVariables(){
+        generatedCode.append("\t/*     private data members          */\n\n");
+        generatedCode.append("\tprivate ServerCommunication comm;\n\n");
+        generatedCode.append("\tprivate RemoteObjectReference ror;\n\n");
+        generatedCode.append("\tprivate RemoteReferenceModuleServer serverModule;\n\n");
+        generatedCode.append("\tprivate " +  interfaceName + " remoteObject;\n");
+        generatedCode.append("}");
+    }
+
+    private void generateSkeletonConstructor(String filename){
+        generatedCode.append("\tpublic " + filename + "(RemoteObjectReference ror, Object remoteObject){\n");
+        generatedCode.append("\t\tthis.remoteObject = (" + interfaceName + ")remoteObject;\n");
+        generatedCode.append("\t\tint remoteObjectPort = ror.getPort();\n");
+        generatedCode.append("\t\tserverModule = RemoteReferenceModuleServer.getServerRemoteReference();\n");
+        generatedCode.append("\t\tserverModule.addReference(ror, this);\n");
+        generatedCode.append("\t\tcomm = new ServerCommunication(remoteObjectPort);\n");
+        generatedCode.append("\t}\n\n");
+    }
+
+    private void generateSkeletonMethods() {
+        // get the methods for the proxy to implement
+        generatedCode.append("\t/*       Declared Methods Generated         */\n\n");
+        // get all declared methods
+        methods = skeletonInterface.getDeclaredMethods();
+        // create a skeleton method for each method of the class
+        for (int i = 0; i < methods.length; i++) {
+            String ret;
+            int mod = methods[i].getModifiers();
+            generatedCode.append("\t");
+            if (Modifier.isAbstract(mod)) {
+                mod = mod - Modifier.ABSTRACT;
+            }
+            generatedCode.append(Modifier.toString(mod));
+            generatedCode.append(" synchronized Message ");
+            String methodName = methods[i].getName();
+            generatedCode.append(methods[i].getName());
+            generatedCode.append("(Message message)");
+            Class exceptionsThrown[] = methods[i].getExceptionTypes();
+            for (int ex = 0; ex < exceptionsThrown.length; ex++) {
+                if (exceptionsThrown.length != 0) {
+                    if (ex == 0) {
+                        generatedCode.append(" throws ");
+                    }
+                    generatedCode.append(exceptionsThrown[ex].getName());
+                    if (i < (exceptionsThrown.length - 1)) {
+                        generatedCode.append(", ");
+                    }
+                }
+            }
+            generatedCode.append("{\n\n");
+            // method body
+            // add parameters to a vector
+            generatedCode.append("\t\tVector vec = message.getArguments();\n");
+            if (methods[i].getReturnType().getName().equals("void")) {
+                generatedCode.append("\t\tremoteObject." + methodName + "(");
+            } else {
+                generatedCode.append("\t\t");
+                if (methods[i].getReturnType().getName().equals("boolean")) {
+                    generatedCode.append("Boolean returnValue;\n");
+                    generatedCode.append("\t\treturnValue = Boolean.valueOf(remoteObject." + methodName + "(");
+                } else if (methods[i].getReturnType().getName().equals("int")) {
+                    generatedCode.append("Integer returnValue;\n");
+                    generatedCode.append("\t\treturnValue = Integer.valueOf(remoteObject." + methodName + "(");
+                } else if (methods[i].getReturnType().getName().equals("double")) {
+                    generatedCode.append("Double returnValue;\n");
+                    generatedCode.append("\t\treturnValue = Double.valueOf(remoteObject." + methodName + "(");
+                } else if (methods[i].getReturnType().getName().equals("char")) {
+                    generatedCode.append("Character returnValue;\n");
+                    generatedCode.append("\t\treturnValue = Character.valueOf(remoteObject." + methodName + "(");
+                } else {
+                    generatedCode.append(methods[i].getReturnType().getName() + " returnValue;\n");
+                    generatedCode.append("\t\treturnValue = remoteObject." + methodName + "(");
+                }
+
+            }
+            Class param[] = methods[i].getParameterTypes();
+            int numbOfParams = param.length;
+            for (int j = 0; j < numbOfParams; j++) {
+                generatedCode.append(" ");
+                if (param[j].getName().equals("int")) {
+                    generatedCode.append("(Integer)");
+                } else if (param[j].getName().equals("double")) {
+                    generatedCode.append("(Double)");
+                } else if (param[j].getName().equals("char")) {
+                    generatedCode.append("(Character)");
+                } else if (param[j].getName().equals("boolean")) {
+                    generatedCode.append("(Boolean)");
+                } else {
+                    generatedCode.append("(" + param[j].getName() + ")");
+                }
+                generatedCode.append("vec.get(" + j + ")");
+                generatedCode.append(" ");
+                if (j < (numbOfParams - 1)) {
+                    generatedCode.append(", ");
+                }
+            }
+            if (methods[i].getReturnType().getName().equals("boolean")) {
+                generatedCode.append("));\n");
+            } else if (methods[i].getReturnType().getName().equals("int")) {
+                generatedCode.append("));\n");
+            } else if (methods[i].getReturnType().getName().equals("double")) {
+                generatedCode.append("));\n");
+            } else if (methods[i].getReturnType().getName().equals("char")) {
+                generatedCode.append("));\n");
+            } else {
+                generatedCode.append(");\n");
+            }
+            generatedCode.append("\t\tVector <Object> returnVector = new Vector<Object>();         "
+                    + "// vector of args to pass back\n");
+            if (!methods[i].getReturnType().getName().equals("void")) {
+                generatedCode.append("\t\treturnVector.add(returnValue);\n");
+            }
+            generatedCode.append("\t\tmessage.setArguments(returnVector);\n");
+            generatedCode.append("\n\t\t// return the message to the dispatcher module\n");
+            generatedCode.append("\t\treturn message;\n");
+            generatedCode.append("\t}\n\n");
         }
     }
 
