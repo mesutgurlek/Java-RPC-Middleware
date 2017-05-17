@@ -1,5 +1,6 @@
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Constructor;
 import java.net.Socket;
 
 /**
@@ -8,11 +9,15 @@ import java.net.Socket;
 public class Naming {
 
     public static synchronized Object lookup(String name, String IP, int portNo) {
+        ObjectOutputStream outputStream = null;
+        ObjectInputStream inputStream = null;
+        Socket registrySocket = null;
+        Object stubObject = null;
         try {
-            Socket registrySocket = new Socket(IP, portNo);
+            registrySocket = new Socket(IP, portNo);
             // create streams for registry communication
-            ObjectOutputStream outputStream = new ObjectOutputStream(registrySocket.getOutputStream());
-            ObjectInputStream inputStream = new ObjectInputStream(registrySocket.getInputStream());
+            outputStream = new ObjectOutputStream(registrySocket.getOutputStream());
+            inputStream = new ObjectInputStream(registrySocket.getInputStream());
 
             // create a msg to send to registry server
             RegistryMessage message = new RegistryMessage(RegistryMessageType.LOOKUP, name);
@@ -30,6 +35,12 @@ public class Naming {
                 /* TODO create a stub with using this class name
                  TODO use parameter of remoteObjRef to connect stup to server
                  TODO then return that stub */
+                String stubName = className + "Stub";
+                Class stubClass = Class.forName(stubName);
+
+                Constructor stubConst = stubClass.getConstructor(RemoteObjectReference.class);
+                stubObject = stubConst.newInstance(remoteObjectReference);
+                System.out.println("Lookup is succesful:" + name);
 
             }
 
@@ -37,18 +48,32 @@ public class Naming {
         } catch (Exception e) {
 
         }
-        return null;
+        finally {
+            try {
+                inputStream.close();
+                outputStream.close();
+                registrySocket.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return stubObject;
     }
 
-    public static Object bind(Object obj, String name, String IP, int portNo) {
+    public static Object bind(Object obj, String name, String registryIP, int registryPort, int objPort) {
+       Object skeletonObj = null;
+        ObjectOutputStream outputStream = null;
+        ObjectInputStream inputStream = null;
+        Socket registrySocket = null;
         try {
-            Socket registrySocket = new Socket(IP, portNo);
+            registrySocket = new Socket(registryIP, registryPort);
             // create streams for registry communication
-            ObjectOutputStream outputStream = new ObjectOutputStream(registrySocket.getOutputStream());
-            ObjectInputStream inputStream = new ObjectInputStream(registrySocket.getInputStream());
+            outputStream = new ObjectOutputStream(registrySocket.getOutputStream());
+            inputStream = new ObjectInputStream(registrySocket.getInputStream());
 
             // create a msg to send to registry server
-            RegistryMessage message = new RegistryMessage(RegistryMessageType.BIND, name, obj, portNo);
+            RegistryMessage message = new RegistryMessage(RegistryMessageType.BIND, name, obj, objPort);
             // send msg
             outputStream.writeObject(message);
             // receive msg (reference)
@@ -63,13 +88,30 @@ public class Naming {
                 /* TODO create a skeleton with using this class name
                  TODO use parameter of remoteObjRef to connect skeleton to server
                  TODO then return that skeleton */
+                String skeletonName = className + "Skeleton";
+                Class skeletonClass = Class.forName(skeletonName);
+                Class[] constArgTypes = {RemoteObjectReference.class, Object.class};
+                Constructor skeletonConst = skeletonClass.getConstructor(constArgTypes);
+                Object[] skeletonConstArgs = {remoteObjectReference, obj};
+
+                skeletonObj = skeletonConst.newInstance(skeletonConstArgs);
             }
 
 
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
-        return null;
+        finally {
+            try {
+                inputStream.close();
+                outputStream.close();
+                registrySocket.close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return skeletonObj;
     }
 
 

@@ -1,3 +1,4 @@
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -8,20 +9,18 @@ public class Dispatcher {
     public Message dispatch(Message message){
         RemoteObjectReference remoteObjectReference = message.getRemoteObjectReference();
 
-        //TODO use referenceLookup for getting methods
-//        RemoteReferenceModuleServer referenceLookup = RemoteReferenceModuleServer.getServerRemoteReference();
-//
-//        Object skeleton = referenceLookup.getReference(ror);
-//        Class c = skeleton.getClass();
-//        Method[] declaredMethods = c.getMethods();
-        Method[] methods = new Method[10];
+        RemoteReferenceModuleServer remoteReferenceModuleServer = RemoteReferenceModuleServer.getServerRemoteReference();
 
+        Object skeleton = remoteReferenceModuleServer.getObjectReference(remoteObjectReference);
 
-        for(Method method: methods){
+        for(Method method: skeleton.getClass().getMethods()){
             if(method.getName().equals(message.getMethodName())){
-                Object[] arguments = new Object[]{message};
-                //TODO insert skeleton
-//                message = (Message)method.invoke((Object)skeleton, arguments);
+                try {
+                    message = (Message)method.invoke(skeleton, message);
+                    System.out.println(message.getMethodName() + " Method Invoked");
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return message;
