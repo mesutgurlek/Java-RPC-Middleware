@@ -1,15 +1,14 @@
 import java.util.*;
 import java.net.*;
-public class CalculatorInterfaceStub implements CalculatorInterface{
+public class CalculatorInterfaceStub implements CalculatorInterface {
 
 	/*     Private Variables          */
 
-	private ClientCommunicationModule comm;
+	public ClientCommunicationModule comm;
 
 	public RemoteObjectReference ror;
 
-	private CalculatorInterface stub;
-
+	public CalculatorInterface stub;
 
 
 	public CalculatorInterfaceStub(RemoteObjectReference ror){

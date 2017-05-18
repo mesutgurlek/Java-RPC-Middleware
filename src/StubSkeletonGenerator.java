@@ -46,7 +46,7 @@ public class StubSkeletonGenerator {
             // Move file to new directory
             boolean success = file.renameTo(new File(dir, file.getName()));
             if (!success) {
-                System.err.println("Error unbale to move file");
+                System.err.println("Error unable to move file");
             }
         }
         catch(Exception e){
@@ -97,11 +97,9 @@ public class StubSkeletonGenerator {
     // Generates stub variables
     private void generateStubVariables() {
         generatedCode.append("\t/*     Private Variables          */\n\n");
-        generatedCode.append("\tprivate ClientCommunicationModule comm;\n\n");
-        generatedCode.append("\tprivate RemoteObjectReference ror;\n\n");
-//        generatedCode.append("\tprivate RemoteReferenceModuleClient clientModule;\n\n");
-        generatedCode.append("\tprivate " + interfaceName + " stub;\n\n");
-        generatedCode.append("\n\n");
+        generatedCode.append("\tpublic ClientCommunicationModule comm;\n\n");
+        generatedCode.append("\tpublic RemoteObjectReference ror;\n\n");
+        generatedCode.append("\tpublic " + interfaceName + " stub;\n\n");
     }
 
     // Generates stub constructor
@@ -111,8 +109,6 @@ public class StubSkeletonGenerator {
         generatedCode.append("\t\tInetAddress remoteObjectAddress = ror.getAddress();\n");
         generatedCode.append("\t\tint remoteObjectPort = ror.getPort();\n");
         generatedCode.append("\t\tcomm = new ClientCommunicationModule();\n");
-//        generatedCode.append("\t\tclientModule = RemoteReferenceModuleClient.getClientRemoteReference();\n");
-//        generatedCode.append("\t\tclientModule.addReference(ror, stub);\n");
         generatedCode.append("\t}\n\n");
     }
 
@@ -231,53 +227,18 @@ public class StubSkeletonGenerator {
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
             out.write(generatedCode.toString());
-            String compileResult = "";
             out.flush();
             out.close();
             System.out.println("Generating file: " + fileName);
 
-            // compile the the new file created
-            String command = "javac " + fileName;
-            Process proc =
-                    Runtime.getRuntime().exec("javac " + fileName);
-            InputStream inputstream =
-                    proc.getInputStream();
-            InputStreamReader inputstreamreader =
-                    new InputStreamReader(inputstream);
-            BufferedReader bufferedreader =
-                    new BufferedReader(inputstreamreader);
-            // read the output
-            String line;
-            while ((line = bufferedreader.readLine())
-                    != null) {
-                System.out.println(line);
-            }
-
-            // check for ls failure
-
-//            try {
-//                if (proc.waitFor() != 0) {
-//                    System.err.println("exit value = " +
-//                            proc.exitValue());
-//                    if(proc.exitValue() > 0){
-//                        System.err.println("Failed to compile " + fileName);
-//                        System.exit(1);
-//                    }
-//                }
-//            }
-//            catch (InterruptedException e) {
-//                System.err.println(e);
-//            }
+            // move the file to the correct location in the directory
+            String dir = "src";
+            moveFile(fileName, dir);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
-//        // move the file to the correct location in the directory
-        String dir = "src/";
-        moveFile(fileName, dir);
-//        String classOut = fileName.replace(".java", ".class");
-//        StubSkeletonGenerator.moveFile(classOut, dir);
     }
 
     private void generateSkeleton(String interfaceName){
@@ -308,10 +269,10 @@ public class StubSkeletonGenerator {
 
     private void generateSkeletonVariables(){
         generatedCode.append("\t/*     private data members          */\n\n");
-        generatedCode.append("\tprivate ServerCommunicationModule comm;\n\n");
-        generatedCode.append("\tprivate RemoteObjectReference ror;\n\n");
-        generatedCode.append("\tprivate RemoteReferenceModuleServer serverModule;\n\n");
-        generatedCode.append("\tprivate " +  interfaceName + " remoteObject;\n");
+        generatedCode.append("\tpublic ServerCommunicationModule comm;\n\n");
+        generatedCode.append("\tpublic RemoteObjectReference ror;\n\n");
+        generatedCode.append("\tpublic RemoteReferenceModuleServer serverModule;\n\n");
+        generatedCode.append("\tpublic " +  interfaceName + " remoteObject;\n\n");
     }
 
     private void generateSkeletonConstructor(String filename){
