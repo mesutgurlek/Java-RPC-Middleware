@@ -9,9 +9,6 @@ import java.util.UUID;
  */
 public class ClientCommunicationModule {
     private Socket serverSocket;
-    private InetAddress serverAddress;
-    private int portNo;
-
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
 

@@ -4,13 +4,15 @@ public class CalculatorInterfaceSkeleton {
 
 	/*     private data members          */
 
-	private ServerCommunicationModule comm;
+	public ServerCommunicationModule comm;
 
-	private RemoteObjectReference ror;
+	public RemoteObjectReference ror;
 
-	private RemoteReferenceModuleServer serverModule;
+	public RemoteReferenceModuleServer serverModule;
 
-	private CalculatorInterface remoteObject;
+	public CalculatorInterface remoteObject;
+
+
 	public CalculatorInterfaceSkeleton(RemoteObjectReference ror, Object remoteObject){
 		this.remoteObject = (CalculatorInterface)remoteObject;
 		int remoteObjectPort = ror.getPort();
