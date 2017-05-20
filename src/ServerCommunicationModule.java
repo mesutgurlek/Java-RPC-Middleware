@@ -6,14 +6,18 @@ import java.net.Socket;
  * Created by aeakdogan on 16/05/2017.
  * ${CLASS}
  */
-public class ServerCommunicationModule {
+public class ServerCommunicationModule extends Thread {
     int port;
     // run server for every skeleton
     public ServerCommunicationModule(int port) {
         this.port = port;
-        this.runServer();
+        this.start();
     }
 
+    @Override
+    public void run() {
+        this.runServer();
+    }
 
     public void runServer() {
         ServerSocket serverSocket = null;

@@ -22,19 +22,22 @@ public class StubSkeletonGenerator {
     public static void main(String args[]){
 
         // Take the interface name that we are going to use for generating stub and skeleton
-        if (args.length != 1) {
-            System.err.println("Usage: StubSkeletonGenerator <Interface Name>");
-            System.exit(1);
+        //if (args.length != 1) {
+        //    System.err.println("Usage: StubSkeletonGenerator <Interface Name>");
+        //    System.exit(1);
+        //}
+        //String interf = args[0];
+
+        for(String arg: args) {
+            //Create stub
+            StubSkeletonGenerator stub = new StubSkeletonGenerator();
+            stub.generateStub(arg);
+
+            // Create skeleton
+            StubSkeletonGenerator skel = new StubSkeletonGenerator();
+            skel.generateSkeleton(arg);
         }
-        String interf = args[0];
 
-        //Create stub
-        StubSkeletonGenerator stub = new StubSkeletonGenerator();
-        stub.generateStub(interf);
-
-        // Create skeleton
-        StubSkeletonGenerator skel = new StubSkeletonGenerator();
-        skel.generateSkeleton(interf);
     }
 
     //  move the file to the correct place in the filesystem
