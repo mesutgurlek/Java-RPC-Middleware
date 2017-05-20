@@ -2,32 +2,18 @@ import java.util.*;
 import java.net.*;
 public class CalculatorInterfaceStub implements CalculatorInterface {
 
-	/*     Private Variables          */
-
 	private ClientCommunicationModule comm;
-
 	private RemoteObjectReference ror;
-
-	private CalculatorInterface stub;
-
 
 
 	public CalculatorInterfaceStub(RemoteObjectReference ror){
 		this.ror = ror;
-		InetAddress remoteObjectAddress = ror.getAddress();
-		int remoteObjectPort = ror.getPort();
-		comm = new ClientCommunicationModule();
+		this.comm = new ClientCommunicationModule();
 	}
-
-	public CalculatorInterface CalculatorInterfaceStubFactory(){
-		return stub;
-	}
-
-	/*       Declared Methods Generated         */
 
 	public int add( int param0 , int param1 ){
 
-		// vector of args to pass
+		// Vector of args to pass
 		Vector <Object> vec = new Vector<Object>();
 		vec.add(param0);
 		vec.add(param1);

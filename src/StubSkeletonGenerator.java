@@ -46,7 +46,7 @@ public class StubSkeletonGenerator {
             // Move file to new directory
             boolean success = file.renameTo(new File(dir, file.getName()));
             if (!success) {
-                System.err.println("Error unbale to move file");
+                System.err.println("Error while moving file");
             }
         }
         catch(Exception e){
@@ -66,7 +66,6 @@ public class StubSkeletonGenerator {
         generateStubClassDefinition("Stub");
         generateStubVariables();
         generateStubConstructor(filename);
-        generateStubFactory(filename);
         generateStubMethods();
         writeToFile(filename + ".java");
     }
@@ -96,11 +95,8 @@ public class StubSkeletonGenerator {
 
     // Generates stub variables
     private void generateStubVariables() {
-        generatedCode.append("\t/*     Private Variables          */\n\n");
-        generatedCode.append("\tprivate ClientCommunicationModule comm;\n\n");
-        generatedCode.append("\tprivate RemoteObjectReference ror;\n\n");
-//        generatedCode.append("\tprivate RemoteReferenceModuleClient clientModule;\n\n");
-        generatedCode.append("\tprivate " + interfaceName + " stub;\n\n");
+        generatedCode.append("\tprivate ClientCommunicationModule comm;\n");
+        generatedCode.append("\tprivate RemoteObjectReference ror;\n");
         generatedCode.append("\n\n");
     }
 
@@ -108,25 +104,13 @@ public class StubSkeletonGenerator {
     private void generateStubConstructor(String filename){
         generatedCode.append("\tpublic " + filename + "(RemoteObjectReference ror){\n");
         generatedCode.append("\t\tthis.ror = ror;\n");
-        generatedCode.append("\t\tInetAddress remoteObjectAddress = ror.getAddress();\n");
-        generatedCode.append("\t\tint remoteObjectPort = ror.getPort();\n");
-        generatedCode.append("\t\tcomm = new ClientCommunicationModule();\n");
-//        generatedCode.append("\t\tclientModule = RemoteReferenceModuleClient.getClientRemoteReference();\n");
-//        generatedCode.append("\t\tclientModule.addReference(ror, stub);\n");
-        generatedCode.append("\t}\n\n");
-    }
-
-    // Generates a method to return a stub instance.
-    private void generateStubFactory(String filename){
-        generatedCode.append("\tpublic " + interfaceName + " "+ filename + "Factory(){\n");
-        generatedCode.append("\t\treturn stub;\n");
+        generatedCode.append("\t\tthis.comm = new ClientCommunicationModule();\n");
         generatedCode.append("\t}\n\n");
     }
 
     // Generates the Stub Methods
     private void generateStubMethods() {
         // Get methods using Java Reflection
-        generatedCode.append("\t/*       Declared Methods Generated         */\n\n");
         methods = stubInterface.getDeclaredMethods();
 
         // Generate a stub method for all methods in interface
@@ -148,7 +132,7 @@ public class StubSkeletonGenerator {
             Class parameters[] = methods[i].getParameterTypes();
             int numOfParams = parameters.length;
 
-            // create all the parameters passes to the stub
+            // Create all the parameters that passes to the stub
             for (int j = 0; j < numOfParams; j++) {
                 generatedCode.append(parameters[j].getName());
                 generatedCode.append(" param");
@@ -163,19 +147,17 @@ public class StubSkeletonGenerator {
             Class exceptions[] = methods[i].getExceptionTypes();
             // Generate exceptions for the stub method
             for (int e = 0; e < exceptions.length; e++) {
-                if (exceptions.length != 0) {
-                    if (e == 0) {
-                        generatedCode.append(" throws ");
-                    }
-                    generatedCode.append(exceptions[e].getName());
-                    if (i < (exceptions.length - 1)) {
-                        generatedCode.append(", ");
-                    }
+                if (e == 0) {
+                    generatedCode.append(" throws ");
+                }
+                generatedCode.append(exceptions[e].getName());
+                if (i < (exceptions.length - 1)) {
+                    generatedCode.append(", ");
                 }
             }
             generatedCode.append("{\n\n");
             // Method body
-            generatedCode.append("\t\t// vector of args to pass\n" +
+            generatedCode.append("\t\t// Vector of args to pass\n" +
                     "\t\tVector <Object> vec = new Vector<Object>();\n");
             // Adding parameters to a vector
             for (int j = 0; j < parameters.length; j++) {
@@ -231,53 +213,16 @@ public class StubSkeletonGenerator {
         try {
             BufferedWriter out = new BufferedWriter(new FileWriter(fileName));
             out.write(generatedCode.toString());
-            String compileResult = "";
             out.flush();
             out.close();
             System.out.println("Generating file: " + fileName);
-
-            // compile the the new file created
-            String command = "javac " + fileName;
-            Process proc =
-                    Runtime.getRuntime().exec("javac " + fileName);
-            InputStream inputstream =
-                    proc.getInputStream();
-            InputStreamReader inputstreamreader =
-                    new InputStreamReader(inputstream);
-            BufferedReader bufferedreader =
-                    new BufferedReader(inputstreamreader);
-            // read the output
-            String line;
-            while ((line = bufferedreader.readLine())
-                    != null) {
-                System.out.println(line);
-            }
-
-            // check for ls failure
-
-//            try {
-//                if (proc.waitFor() != 0) {
-//                    System.err.println("exit value = " +
-//                            proc.exitValue());
-//                    if(proc.exitValue() > 0){
-//                        System.err.println("Failed to compile " + fileName);
-//                        System.exit(1);
-//                    }
-//                }
-//            }
-//            catch (InterruptedException e) {
-//                System.err.println(e);
-//            }
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
-//        // move the file to the correct location in the directory
         String dir = "src/";
         moveFile(fileName, dir);
-//        String classOut = fileName.replace(".java", ".class");
-//        StubSkeletonGenerator.moveFile(classOut, dir);
     }
 
     private void generateSkeleton(String interfaceName){
@@ -307,26 +252,24 @@ public class StubSkeletonGenerator {
     }
 
     private void generateSkeletonVariables(){
-        generatedCode.append("\t/*     private data members          */\n\n");
-        generatedCode.append("\tprivate ServerCommunicationModule comm;\n\n");
-        generatedCode.append("\tprivate RemoteObjectReference ror;\n\n");
-        generatedCode.append("\tprivate RemoteReferenceModuleServer serverModule;\n\n");
+        generatedCode.append("\tprivate ServerCommunicationModule comm;\n");
+        generatedCode.append("\tprivate RemoteObjectReference ror;\n");
+        generatedCode.append("\tprivate RemoteReferenceModuleServer serverModule;\n");
         generatedCode.append("\tprivate " +  interfaceName + " remoteObject;\n");
+        generatedCode.append("\n\n");
     }
 
     private void generateSkeletonConstructor(String filename){
         generatedCode.append("\tpublic " + filename + "(RemoteObjectReference ror, Object remoteObject){\n");
         generatedCode.append("\t\tthis.remoteObject = (" + interfaceName + ")remoteObject;\n");
-        generatedCode.append("\t\tint remoteObjectPort = ror.getPort();\n");
         generatedCode.append("\t\tserverModule = RemoteReferenceModuleServer.getServerRemoteReference();\n");
         generatedCode.append("\t\tserverModule.addObjectReference(ror, this);\n");
-        generatedCode.append("\t\tcomm = new ServerCommunicationModule(remoteObjectPort);\n");
+        generatedCode.append("\t\tcomm = new ServerCommunicationModule(ror.getPort());\n");
         generatedCode.append("\t}\n\n");
     }
 
     private void generateSkeletonMethods() {
         // get the methods for the proxy to implement
-        generatedCode.append("\t/*       Declared Methods Generated         */\n\n");
         // get all declared methods
         methods = skeletonInterface.getDeclaredMethods();
         // create a skeleton method for each method of the class
@@ -338,20 +281,18 @@ public class StubSkeletonGenerator {
                 mod = mod - Modifier.ABSTRACT;
             }
             generatedCode.append(Modifier.toString(mod));
-            generatedCode.append(" synchronized Message ");
+            generatedCode.append(" Message ");
             String methodName = methods[i].getName();
             generatedCode.append(methods[i].getName());
             generatedCode.append("(Message message)");
             Class exceptionsThrown[] = methods[i].getExceptionTypes();
             for (int ex = 0; ex < exceptionsThrown.length; ex++) {
-                if (exceptionsThrown.length != 0) {
-                    if (ex == 0) {
-                        generatedCode.append(" throws ");
-                    }
-                    generatedCode.append(exceptionsThrown[ex].getName());
-                    if (i < (exceptionsThrown.length - 1)) {
-                        generatedCode.append(", ");
-                    }
+                if (ex == 0) {
+                    generatedCode.append(" throws ");
+                }
+                generatedCode.append(exceptionsThrown[ex].getName());
+                if (i < (exceptionsThrown.length - 1)) {
+                    generatedCode.append(", ");
                 }
             }
             generatedCode.append("{\n\n");

@@ -2,26 +2,20 @@ import java.util.*;
 import java.net.*;
 public class CalculatorInterfaceSkeleton {
 
-	/*     private data members          */
-
 	private ServerCommunicationModule comm;
-
 	private RemoteObjectReference ror;
-
 	private RemoteReferenceModuleServer serverModule;
-
 	private CalculatorInterface remoteObject;
+
+
 	public CalculatorInterfaceSkeleton(RemoteObjectReference ror, Object remoteObject){
 		this.remoteObject = (CalculatorInterface)remoteObject;
-		int remoteObjectPort = ror.getPort();
 		serverModule = RemoteReferenceModuleServer.getServerRemoteReference();
 		serverModule.addObjectReference(ror, this);
-		comm = new ServerCommunicationModule(remoteObjectPort);
+		comm = new ServerCommunicationModule(ror.getPort());
 	}
 
-	/*       Declared Methods Generated         */
-
-	public synchronized Message add(Message message){
+	public Message add(Message message){
 
 		Vector vec = message.getArguments();
 		Integer returnValue;
