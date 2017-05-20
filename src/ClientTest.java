@@ -1,7 +1,4 @@
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.Scanner;
 
 /**
@@ -10,10 +7,18 @@ import java.util.Scanner;
 public class ClientTest {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         Scanner scan = new Scanner(System.in);
-        int port = Integer.parseInt(args[0]);
+        int portNo;
+
+        if (args.length != 1) {
+            System.out.print("Enter Port No: ");
+            Scanner scanner = new Scanner(System.in);
+            portNo = scanner.nextInt();
+        } else {
+            portNo = Integer.parseInt(args[0]);
+        }
 
 
-        CalculatorInterfaceStub stub = (CalculatorInterfaceStub)Naming.lookup("object", "localhost",  6000);
+        CalculatorInterfaceStub stub = (CalculatorInterfaceStub)Naming.lookup("object", "localhost",  portNo);
         while(true) {
             int i1 = scan.nextInt();
             int i2 = scan.nextInt();

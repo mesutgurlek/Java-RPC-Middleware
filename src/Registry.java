@@ -1,6 +1,7 @@
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class Registry {
 
@@ -43,7 +44,14 @@ public class Registry {
 
 
 	public static void main(String []args) {
-		int portNo = Integer.parseInt(args[0]);
+		int portNo;
+        if (args.length != 1) {
+            System.out.print("Enter Port No: ");
+            Scanner scanner = new Scanner(System.in);
+            portNo = scanner.nextInt();
+        } else {
+            portNo = Integer.parseInt(args[0]);
+        }
 		// start registry at given port
 		Registry myReg = new Registry();
 		myReg.runRegistrySystem(portNo);
