@@ -8,9 +8,10 @@ import java.net.Socket;
  */
 public class ServerCommunicationModule {
     int port;
-
+    // run server for every skeleton
     public ServerCommunicationModule(int port) {
         this.port = port;
+        this.runServer();
     }
 
 

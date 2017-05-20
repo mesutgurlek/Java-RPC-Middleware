@@ -14,7 +14,6 @@ public class ClientTest {
 
 
         CalculatorInterfaceStub stub = (CalculatorInterfaceStub)Naming.lookup("object", "localhost",  6000);
-        System.out.println(stub.ror.getAddress() + "-" + stub.ror.getPort());
         while(true) {
             int i1 = scan.nextInt();
             int i2 = scan.nextInt();
