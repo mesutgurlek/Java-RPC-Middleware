@@ -50,9 +50,15 @@ public class Naming {
         }
         finally {
             try {
-                inputStream.close();
-                outputStream.close();
-                registrySocket.close();
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+                if (registrySocket != null) {
+                    registrySocket.close();
+                }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -104,9 +110,15 @@ public class Naming {
         }
         finally {
             try {
-                inputStream.close();
-                outputStream.close();
-                registrySocket.close();
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+                if (registrySocket != null) {
+                    registrySocket.close();
+                }
             }
             catch (Exception e) {
                 e.printStackTrace();
