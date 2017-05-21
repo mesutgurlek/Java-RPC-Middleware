@@ -21,6 +21,13 @@ public class StubSkeletonGenerator {
 
     public static void main(String args[]){
 
+        // Take the interface name that we are going to use for generating stub and skeleton
+        //if (args.length != 1) {
+        //    System.err.println("Usage: StubSkeletonGenerator <Interface Name>");
+        //    System.exit(1);
+        //}
+        //String interf = args[0];
+
         for(String arg: args) {
             //Create stub
             StubSkeletonGenerator stub = new StubSkeletonGenerator();
@@ -252,10 +259,6 @@ public class StubSkeletonGenerator {
         catch (IOException e) {
             e.printStackTrace();
         }
-
-       // move the file to the correct location in the directory
-        String dir = "src/";
-        moveFile(fileName, dir);
     }
 
     private void generateSkeleton(String interfaceName){

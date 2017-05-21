@@ -21,6 +21,13 @@ public class StubSkeletonGenerator {
 
     public static void main(String args[]){
 
+        // Take the interface name that we are going to use for generating stub and skeleton
+        //if (args.length != 1) {
+        //    System.err.println("Usage: StubSkeletonGenerator <Interface Name>");
+        //    System.exit(1);
+        //}
+        //String interf = args[0];
+
         for(String arg: args) {
             //Create stub
             StubSkeletonGenerator stub = new StubSkeletonGenerator();
@@ -248,14 +255,32 @@ public class StubSkeletonGenerator {
                     != null) {
                 System.out.println(line);
             }
+
+            // check for ls failure
+
+//            try {
+//                if (proc.waitFor() != 0) {
+//                    System.err.println("exit value = " +
+//                            proc.exitValue());
+//                    if(proc.exitValue() > 0){
+//                        System.err.println("Failed to compile " + fileName);
+//                        System.exit(1);
+//                    }
+//                }
+//            }
+//            catch (InterruptedException e) {
+//                System.err.println(e);
+//            }
         }
         catch (IOException e) {
             e.printStackTrace();
         }
 
-       // move the file to the correct location in the directory
+//        // move the file to the correct location in the directory
         String dir = "src/";
         moveFile(fileName, dir);
+//        String classOut = fileName.replace(".java", ".class");
+//        StubSkeletonGenerator.moveFile(classOut, dir);
     }
 
     private void generateSkeleton(String interfaceName){
