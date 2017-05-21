@@ -21,7 +21,7 @@ public class ServerInterfaceSkeleton {
 
 	/*       Declared Methods Generated         */
 
-	public synchronized Message match(Message message){
+	public Message match(Message message){
 
 		Vector vec = message.getArguments();
 		java.lang.String returnValue;

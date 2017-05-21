@@ -43,6 +43,7 @@ public class Server implements ServerInterface, Serializable
 			return val;					
     	}
 		else {
+			System.out.println("else");
 				lock2.lock();
 	    		prevName2 = name;
 	    		lock2.unlock();

@@ -11,7 +11,6 @@ public class RemoteObjectReference implements Serializable {
     private String name;
     private int port;
     private String className;
-    private UUID uniqueID;
     private InetAddress address;
 
     public RemoteObjectReference(RegistryMessage message, InetAddress addr) {
@@ -23,7 +22,6 @@ public class RemoteObjectReference implements Serializable {
         //}
         this.port = message.getPort();
         this.address = addr;
-        uniqueID = UUID.randomUUID(); // create unique ID for every reference
     }
 
     public RemoteObjectReference(String name, String className, int port, InetAddress addr) {
@@ -31,7 +29,6 @@ public class RemoteObjectReference implements Serializable {
         this.className = className;
         this.port = port;
         this.address = addr;
-        uniqueID = UUID.randomUUID(); // create unique ID for every reference
     }
 
     public String getName() {
@@ -56,14 +53,6 @@ public class RemoteObjectReference implements Serializable {
 
     public void setClassName(String className) {
         this.className = className;
-    }
-
-    public UUID getUniqueID() {
-        return uniqueID;
-    }
-
-    public void setUniqueID(UUID uniqueID) {
-        this.uniqueID = uniqueID;
     }
 
     public InetAddress getAddress() {

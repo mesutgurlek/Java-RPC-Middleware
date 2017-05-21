@@ -2,15 +2,13 @@
 
 public class ClientDriver {
 	public static void main(String arg[]) 
-    { 
-        
+    {
+		Client client = new Client(arg[0], Integer.parseInt(arg[1]), Integer.parseInt(arg[2]));
         try 
         { 
         	
         	ServerInterface server = (ServerInterface) Naming.lookup("RMIServer", "localhost", 6000 );  //objectname in registry
-        	
-        	Client client = new Client(arg[0], Integer.parseInt(arg[1]));
-        	Naming.bind(client, client.getName(), "localhost", 6000, 0);
+	    	Naming.bind(client, client.getName(), "localhost", 6000, client.getPort());
         	
         	System.out.println(client.getName() + " asks the server for a match");
         	String matchName = server.match(client.getName(), client.getTimeout());
@@ -26,7 +24,7 @@ public class ClientDriver {
             		System.out.println(client.getName() + " sends a handshake to " + matchName);
             	}
             	else {
-            		matchClient.handshake();	
+            		matchClient.handshake();
             		System.out.println(client.getName() + " sends a handshake to " + matchName);
             		System.out.println(client.getName() + " waits for " + matchName + "'s handshake");
             		while(client.getHandshake() == false);
@@ -47,5 +45,7 @@ public class ClientDriver {
            e.printStackTrace(); 
         } 
         System.out.println("OVER");
+        Naming.remove(client.getName(), "localhost", 6000);
+        System.exit(0);
     }
 }
