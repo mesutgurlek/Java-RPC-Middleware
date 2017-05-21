@@ -16,6 +16,7 @@ public class RegistryMessage implements Serializable {
         this.setObject(object);
         this.setPort(port);
     }
+
     // constructor to create lookup message
     public RegistryMessage(RegistryMessageType type, String name) {
         this.setType(type);

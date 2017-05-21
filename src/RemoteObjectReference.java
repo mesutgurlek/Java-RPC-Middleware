@@ -1,6 +1,5 @@
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.util.UUID;
 
 /**
  * Created by cagri on 15.05.2017.
@@ -11,7 +10,6 @@ public class RemoteObjectReference implements Serializable {
     private String name;
     private int port;
     private String className;
-    private UUID uniqueID;
     private InetAddress address;
 
     public RemoteObjectReference(RegistryMessage message, InetAddress addr) {
@@ -23,7 +21,6 @@ public class RemoteObjectReference implements Serializable {
         //}
         this.port = message.getPort();
         this.address = addr;
-        uniqueID = UUID.randomUUID(); // create unique ID for every reference
     }
 
     public RemoteObjectReference(String name, String className, int port, InetAddress addr) {
@@ -31,7 +28,6 @@ public class RemoteObjectReference implements Serializable {
         this.className = className;
         this.port = port;
         this.address = addr;
-        uniqueID = UUID.randomUUID(); // create unique ID for every reference
     }
 
     public String getName() {
@@ -58,14 +54,6 @@ public class RemoteObjectReference implements Serializable {
         this.className = className;
     }
 
-    public UUID getUniqueID() {
-        return uniqueID;
-    }
-
-    public void setUniqueID(UUID uniqueID) {
-        this.uniqueID = uniqueID;
-    }
-
     public InetAddress getAddress() {
         return address;
     }
@@ -74,7 +62,7 @@ public class RemoteObjectReference implements Serializable {
         this.address = address;
     }
 
-    public int hashCode(){
+    public int hashCode() {
         int hashCode = 17;
         hashCode = 37 * hashCode + name.hashCode();
         hashCode = 37 * hashCode + address.hashCode();
@@ -84,21 +72,17 @@ public class RemoteObjectReference implements Serializable {
 
     /**
      * Compares if two RemoteObjectReferences are equal.
+     *
      * @param o the object to compare for equality.
      * @return boolean Returns true if two RemoteObjectReferences are equal.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean equals(Object o){
-        if((o != null) && (this.getClass() == o.getClass())){
-            RemoteObjectReference ror = (RemoteObjectReference)o;
-            if((port == ror.getPort()) &&
+    public boolean equals(Object o) {
+        if ((o != null) && (this.getClass() == o.getClass())) {
+            RemoteObjectReference ror = (RemoteObjectReference) o;
+            return (port == ror.getPort()) &&
                     (address.equals(ror.getAddress()) &&
-                            (name.equals(ror.getName())))){
-                return true;
-            }
-            else{
-                return false;
-            }
+                            (name.equals(ror.getName())));
         } else {
             return false;
         }

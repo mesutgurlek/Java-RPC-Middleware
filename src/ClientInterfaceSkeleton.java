@@ -1,27 +1,32 @@
 import java.util.Vector;
 
-public class CalculatorInterfaceSkeleton {
+public class ClientInterfaceSkeleton {
+
+	/*     private data members          */
 
     private ServerCommunicationModule comm;
+
     private RemoteObjectReference ror;
+
     private RemoteReferenceModuleServer serverModule;
-    private CalculatorInterface remoteObject;
 
+    private ClientInterface remoteObject;
 
-    public CalculatorInterfaceSkeleton(RemoteObjectReference ror, Object remoteObject) {
-        this.remoteObject = (CalculatorInterface) remoteObject;
+    public ClientInterfaceSkeleton(RemoteObjectReference ror, Object remoteObject) {
+        this.remoteObject = (ClientInterface) remoteObject;
+        int remoteObjectPort = ror.getPort();
         serverModule = RemoteReferenceModuleServer.getServerRemoteReference();
         serverModule.addObjectReference(ror, this);
-        comm = new ServerCommunicationModule(ror.getPort());
+        comm = new ServerCommunicationModule(remoteObjectPort);
     }
 
-    public Message add(Message message) {
+	/*       Declared Methods Generated         */
+
+    public synchronized Message handshake(Message message) {
 
         Vector vec = message.getArguments();
-        Integer returnValue;
-        returnValue = Integer.valueOf(remoteObject.add((Integer) vec.get(0), (Integer) vec.get(1)));
+        remoteObject.handshake();
         Vector<Object> returnVector = new Vector<Object>();         // vector of args to pass back
-        returnVector.add(returnValue);
         message.setArguments(returnVector);
 
         // return the message to the dispatcher module

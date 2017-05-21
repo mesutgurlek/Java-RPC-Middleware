@@ -35,15 +35,22 @@ public class RegistryRequestHandler extends Thread {
     public synchronized RemoteObjectReference lookup(RegistryMessage message) {
         String name = message.getName();
         RemoteObjectReference remoteObjectReference;
-        if(table.containsKey(name)) {
+        if (table.containsKey(name)) {
             remoteObjectReference = table.get(name);
-        }
-        else {
+        } else {
             System.out.println("Object:" + name + " is not in the registry!");
             remoteObjectReference = null;
         }
 
         return remoteObjectReference;
+    }
+
+    public synchronized boolean remove(RegistryMessage message) {
+        String name = message.getName();
+        RemoteObjectReference ror = table.remove(name);
+
+        return ror != null;
+
     }
 
 
@@ -67,19 +74,23 @@ public class RegistryRequestHandler extends Thread {
                     RemoteObjectReference remoteObjectReference1 = lookup(message);
                     outputStream.writeObject(remoteObjectReference1);
                     break;
+                case REMOVE:
+                    boolean result = remove(message);
+                    outputStream.writeObject(result);
+                    break;
+
                 default:
                     System.out.println("Invalid request!");
                     break;
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 inputStream.close();
                 outputStream.close();
                 inSocket.close();
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

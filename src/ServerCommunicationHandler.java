@@ -7,7 +7,7 @@ import java.net.Socket;
  * Created by aeakdogan on 16/05/2017.
  * ${CLASS}
  */
-public class ServerCommunicationHandler extends Thread{
+public class ServerCommunicationHandler extends Thread {
     Socket clientSocket;
     ObjectInputStream inputStream;
     ObjectOutputStream outputStream;
@@ -27,8 +27,7 @@ public class ServerCommunicationHandler extends Thread{
             this.sendMessage(m);
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 inputStream.close();
                 outputStream.close();
@@ -38,7 +37,8 @@ public class ServerCommunicationHandler extends Thread{
             }
         }
     }
-    public void sendMessage(Message message){
+
+    public void sendMessage(Message message) {
         try {
             outputStream.writeObject(message);
         } catch (IOException e) {
@@ -46,11 +46,11 @@ public class ServerCommunicationHandler extends Thread{
         }
     }
 
-    public Message receiveMessage(){
+    public Message receiveMessage() {
         Message message = null;
         try {
             message = (Message) inputStream.readObject();
-            message =  new Dispatcher().dispatch(message);
+            message = new Dispatcher().dispatch(message);
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
