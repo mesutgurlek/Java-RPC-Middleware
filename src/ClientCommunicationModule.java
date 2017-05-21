@@ -2,15 +2,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.UUID;
 
 /**
  * Created by cagri on 16.05.2017.
  */
 public class ClientCommunicationModule {
     private Socket serverSocket;
-    private InetAddress serverAddress;
-    private int portNo;
 
     private ObjectInputStream inputStream;
     private ObjectOutputStream outputStream;
@@ -39,25 +36,24 @@ public class ClientCommunicationModule {
             e.printStackTrace();
         }
     }
+
     public Message receiveMessage() {
         Message message = null;
         try {
-            message = (Message)inputStream.readObject();
+            message = (Message) inputStream.readObject();
 
-            if(message.getMessageType() == MessageType.CLOSE){
+            if (message.getMessageType() == MessageType.CLOSE) {
                 System.out.println("No more active objects: All server down");
                 System.exit(0);
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 inputStream.close();
                 outputStream.close();
                 serverSocket.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

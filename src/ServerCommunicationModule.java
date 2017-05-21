@@ -9,6 +9,7 @@ import java.net.Socket;
 public class ServerCommunicationModule extends Thread {
     int port;
     private ServerSocket serverSocket;
+
     // run server for every skeleton
     public ServerCommunicationModule(int port) {
         this.port = port;
@@ -33,8 +34,7 @@ public class ServerCommunicationModule extends Thread {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             this.closeServer();
         }
     }

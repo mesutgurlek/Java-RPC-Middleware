@@ -8,27 +8,26 @@ public class RemoteReferenceModuleServer {
     private static RemoteReferenceModuleServer remoteReferenceModuleServer;
     public HashMap<RemoteObjectReference, Object> remoteObjectReferenceObjectHashMap;
 
-    //SINGLETON PATTERN
-    public static synchronized RemoteReferenceModuleServer getServerRemoteReference(){
-        if(remoteReferenceModuleServer != null)
-            return remoteReferenceModuleServer;
-        return remoteReferenceModuleServer = new RemoteReferenceModuleServer();
-    }
-
     public RemoteReferenceModuleServer() {
         remoteObjectReferenceObjectHashMap = new HashMap<>();
     }
 
+    //SINGLETON PATTERN
+    public static synchronized RemoteReferenceModuleServer getServerRemoteReference() {
+        if (remoteReferenceModuleServer != null)
+            return remoteReferenceModuleServer;
+        return remoteReferenceModuleServer = new RemoteReferenceModuleServer();
+    }
 
-    public synchronized void addObjectReference(RemoteObjectReference remoteObjectReference, Object object){
+    public synchronized void addObjectReference(RemoteObjectReference remoteObjectReference, Object object) {
         remoteObjectReferenceObjectHashMap.put(remoteObjectReference, object);
     }
 
-    public synchronized void removeObjectReference(RemoteObjectReference remoteObjectReference){
+    public synchronized void removeObjectReference(RemoteObjectReference remoteObjectReference) {
         remoteObjectReferenceObjectHashMap.remove(remoteObjectReference);
     }
 
-    public synchronized Object getObjectReference(RemoteObjectReference remoteObjectReference){
+    public synchronized Object getObjectReference(RemoteObjectReference remoteObjectReference) {
         return remoteObjectReferenceObjectHashMap.get(remoteObjectReference);
     }
 

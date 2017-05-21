@@ -1,6 +1,3 @@
-
-
-public interface ServerInterface
-{
-	String match(String name, int timeoutSecs);
+public interface ServerInterface {
+    String match(String name, int timeoutSecs);
 }
