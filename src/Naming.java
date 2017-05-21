@@ -26,13 +26,12 @@ public class Naming {
             // send msg
             outputStream.writeObject(message);
             // receive msg (reference)
-            RemoteObjectReference remoteObjectReference = (RemoteObjectReference)inputStream.readObject();
+            RemoteObjectReference remoteObjectReference = (RemoteObjectReference) inputStream.readObject();
 
-            if(remoteObjectReference == null) {
+            if (remoteObjectReference == null) {
                 System.out.println("Object is not found");
                 return null;
-            }
-            else {
+            } else {
                 String className = remoteObjectReference.getClassName(); // CalculatorInterface
                 /* TODO create a stub with using this class name
                  TODO use parameter of remoteObjRef to connect stup to server
@@ -49,8 +48,7 @@ public class Naming {
 
         } catch (Exception e) {
 
-        }
-        finally {
+        } finally {
             try {
                 if (inputStream != null) {
                     inputStream.close();
@@ -61,8 +59,7 @@ public class Naming {
                 if (registrySocket != null) {
                     registrySocket.close();
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -70,7 +67,7 @@ public class Naming {
     }
 
     public static Object bind(Object obj, String name, String registryIP, int registryPort, int objPort) {
-       Object skeletonObj = null;
+        Object skeletonObj = null;
         ObjectOutputStream outputStream = null;
         ObjectInputStream inputStream = null;
         Socket registrySocket = null;
@@ -85,13 +82,12 @@ public class Naming {
             // send msg
             outputStream.writeObject(message);
             // receive msg (reference)
-            RemoteObjectReference remoteObjectReference = (RemoteObjectReference)inputStream.readObject();
+            RemoteObjectReference remoteObjectReference = (RemoteObjectReference) inputStream.readObject();
 
-            if(remoteObjectReference == null) {
+            if (remoteObjectReference == null) {
                 System.out.println("Binding error (null return)");
                 return null;
-            }
-            else {
+            } else {
                 String className = remoteObjectReference.getClassName(); // EX. CalculatorInterface
                 System.out.println("Binding: " + className);
                 /* TODO create a skeleton with using this class name
@@ -109,8 +105,7 @@ public class Naming {
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             try {
                 if (inputStream != null) {
                     inputStream.close();
@@ -121,8 +116,7 @@ public class Naming {
                 if (registrySocket != null) {
                     registrySocket.close();
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -144,7 +138,7 @@ public class Naming {
             RegistryMessage message = new RegistryMessage(RegistryMessageType.REMOVE, name, null, 0);
             // send msg
             outputStream.writeObject(message);
-            boolean isRemoved = (boolean)inputStream.readObject();
+            boolean isRemoved = (boolean) inputStream.readObject();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {

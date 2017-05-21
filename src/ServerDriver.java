@@ -1,8 +1,7 @@
 import java.util.Scanner;
 
 public class ServerDriver {
-	public static void main(String args[]) 
-    {
+    public static void main(String args[]) {
         int registryPort;
         int objPort;
         if (args.length != 2) {
@@ -16,14 +15,11 @@ public class ServerDriver {
             registryPort = Integer.parseInt(args[0]);
             objPort = Integer.parseInt(args[1]);
         }
-        try 
-        {
-        	ServerInterface obj = new Server();
+        try {
+            ServerInterface obj = new Server();
             // Bind this object
-        	Naming.bind(obj , "RMIServer", "localhost", 6000, 2500);
-        } 
-        catch (Exception e) 
-        { 
+            Naming.bind(obj, "RMIServer", "localhost", registryPort, objPort);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

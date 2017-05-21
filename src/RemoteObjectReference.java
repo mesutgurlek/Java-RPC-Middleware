@@ -1,6 +1,5 @@
 import java.io.Serializable;
 import java.net.InetAddress;
-import java.util.UUID;
 
 /**
  * Created by cagri on 15.05.2017.
@@ -63,7 +62,7 @@ public class RemoteObjectReference implements Serializable {
         this.address = address;
     }
 
-    public int hashCode(){
+    public int hashCode() {
         int hashCode = 17;
         hashCode = 37 * hashCode + name.hashCode();
         hashCode = 37 * hashCode + address.hashCode();
@@ -73,21 +72,17 @@ public class RemoteObjectReference implements Serializable {
 
     /**
      * Compares if two RemoteObjectReferences are equal.
+     *
      * @param o the object to compare for equality.
      * @return boolean Returns true if two RemoteObjectReferences are equal.
      * @see java.lang.Object#equals(java.lang.Object)
      */
-    public boolean equals(Object o){
-        if((o != null) && (this.getClass() == o.getClass())){
-            RemoteObjectReference ror = (RemoteObjectReference)o;
-            if((port == ror.getPort()) &&
+    public boolean equals(Object o) {
+        if ((o != null) && (this.getClass() == o.getClass())) {
+            RemoteObjectReference ror = (RemoteObjectReference) o;
+            return (port == ror.getPort()) &&
                     (address.equals(ror.getAddress()) &&
-                            (name.equals(ror.getName())))){
-                return true;
-            }
-            else{
-                return false;
-            }
+                            (name.equals(ror.getName())));
         } else {
             return false;
         }

@@ -1,14 +1,17 @@
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 /**
  * Created by mesutgurlek on 5/16/17.
- *
+ * <p>
  * Stub and skeleton generator for the RPC system
- *
+ * <p>
  * Usage is as the following:
- *      java StubSkeletonGenerator 'Class Name' 'Class Interface Name'
+ * java StubSkeletonGenerator 'Class Name' 'Class Interface Name'
  */
 
 
@@ -19,7 +22,12 @@ public class StubSkeletonGenerator {
     private StringBuffer generatedCode;
     private String interfaceName;
 
-    public static void main(String args[]){
+    private StubSkeletonGenerator() {
+        this.interfaceName = null;
+        this.generatedCode = new StringBuffer();
+    }
+
+    public static void main(String args[]) {
 
         // Take the interface name that we are going to use for generating stub and skeleton
         //if (args.length != 1) {
@@ -28,7 +36,7 @@ public class StubSkeletonGenerator {
         //}
         //String interf = args[0];
 
-        for(String arg: args) {
+        for (String arg : args) {
             //Create stub
             StubSkeletonGenerator stub = new StubSkeletonGenerator();
             stub.generateStub(arg);
@@ -41,8 +49,8 @@ public class StubSkeletonGenerator {
     }
 
     //  move the file to the correct place in the filesystem
-    private static void moveFile(String fileToMove, String destinationDirectory){
-        try{
+    private static void moveFile(String fileToMove, String destinationDirectory) {
+        try {
             File file = new File(fileToMove);
             // Destination directory
             File dir = new File(destinationDirectory);
@@ -51,18 +59,12 @@ public class StubSkeletonGenerator {
             if (!success) {
                 System.err.println("Error while moving file");
             }
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private StubSkeletonGenerator() {
-        this.interfaceName = null;
-        this.generatedCode = new StringBuffer();
-    }
-
-    private void generateStub(String interfaceName){
+    private void generateStub(String interfaceName) {
         this.interfaceName = interfaceName;
         String filename = interfaceName + "Stub";
         generateHeader();
@@ -82,10 +84,10 @@ public class StubSkeletonGenerator {
 
     // Generate class definition
     // Uses Java Reflection
-    private void generateStubClassDefinition(String fileType){
-        try{
+    private void generateStubClassDefinition(String fileType) {
+        try {
             stubInterface = Class.forName(this.interfaceName);
-        }catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             System.err.println("Got Error: " + e.toString());
         }
 
@@ -104,7 +106,7 @@ public class StubSkeletonGenerator {
     }
 
     // Generates stub constructor
-    private void generateStubConstructor(String filename){
+    private void generateStubConstructor(String filename) {
         generatedCode.append("\tpublic " + filename + "(RemoteObjectReference ror){\n");
         generatedCode.append("\t\tthis.ror = ror;\n");
         generatedCode.append("\t\tthis.comm = new ClientCommunicationModule();\n");
@@ -165,7 +167,7 @@ public class StubSkeletonGenerator {
             // Adding parameters to a vector
             for (int j = 0; j < parameters.length; j++) {
                 generatedCode.append("\t\tvec.add(");
-                if(parameters[j].getName().equals("char")){
+                if (parameters[j].getName().equals("char")) {
                     generatedCode.append("(Character)");
                 }
                 generatedCode.append("param" + j + ");\n");
@@ -186,15 +188,15 @@ public class StubSkeletonGenerator {
                     generatedCode.append("\t\tInteger returnType = " + "(Integer) "
                             + "returnedFromServer.get(0);\n");
                     generatedCode.append("\t\treturn returnType.intValue();\n");
-                } else if(methods[i].getReturnType().getName().equals("double")){
+                } else if (methods[i].getReturnType().getName().equals("double")) {
                     generatedCode.append("\t\tDouble returnType = " + "(Double) "
                             + "returnedFromServer.get(0);\n");
                     generatedCode.append("\t\treturn returnType.doubleValue();\n");
-                } else if(methods[i].getReturnType().getName().equals("char")){
+                } else if (methods[i].getReturnType().getName().equals("char")) {
                     generatedCode.append("\t\t Character returnType = " + "(Character) "
                             + "returnedFromServer.get(0);\n");
                     generatedCode.append("\t\treturn returnType.charValue();\n");
-                } else if(methods[i].getReturnType().getName().equals("boolean")){
+                } else if (methods[i].getReturnType().getName().equals("boolean")) {
                     generatedCode.append("\t\tBoolean returnType = " + "(Boolean) "
                             + "returnedFromServer.get(0);\n");
                     generatedCode.append("\t\treturn returnType.booleanValue();\n");
@@ -219,8 +221,7 @@ public class StubSkeletonGenerator {
             out.flush();
             out.close();
             System.out.println("Generating file: " + fileName);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -228,7 +229,7 @@ public class StubSkeletonGenerator {
         moveFile(fileName, dir);
     }
 
-    private void generateSkeleton(String interfaceName){
+    private void generateSkeleton(String interfaceName) {
         generatedCode = new StringBuffer();
         this.interfaceName = interfaceName;
         String filename = interfaceName + "Skeleton";
@@ -240,10 +241,10 @@ public class StubSkeletonGenerator {
         writeToFile(filename + ".java");
     }
 
-    private void generateSkeletonClassDefinition(String fileType){
-        try{
+    private void generateSkeletonClassDefinition(String fileType) {
+        try {
             skeletonInterface = Class.forName(this.interfaceName);
-        }catch (ClassNotFoundException e){
+        } catch (ClassNotFoundException e) {
             System.err.println("Got Error: " + e.toString());
         }
 
@@ -254,15 +255,15 @@ public class StubSkeletonGenerator {
         generatedCode.append(" {\n\n");
     }
 
-    private void generateSkeletonVariables(){
+    private void generateSkeletonVariables() {
         generatedCode.append("\tprivate ServerCommunicationModule comm;\n");
         generatedCode.append("\tprivate RemoteObjectReference ror;\n");
         generatedCode.append("\tprivate RemoteReferenceModuleServer serverModule;\n");
-        generatedCode.append("\tprivate " +  interfaceName + " remoteObject;\n");
+        generatedCode.append("\tprivate " + interfaceName + " remoteObject;\n");
         generatedCode.append("\n\n");
     }
 
-    private void generateSkeletonConstructor(String filename){
+    private void generateSkeletonConstructor(String filename) {
         generatedCode.append("\tpublic " + filename + "(RemoteObjectReference ror, Object remoteObject){\n");
         generatedCode.append("\t\tthis.remoteObject = (" + interfaceName + ")remoteObject;\n");
         generatedCode.append("\t\tserverModule = RemoteReferenceModuleServer.getServerRemoteReference();\n");

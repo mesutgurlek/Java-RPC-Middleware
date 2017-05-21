@@ -18,8 +18,8 @@ public class ClientTest {
         }
 
 
-        CalculatorInterfaceStub stub = (CalculatorInterfaceStub)Naming.lookup("object", "localhost",  portNo);
-        while(true) {
+        CalculatorInterfaceStub stub = (CalculatorInterfaceStub) Naming.lookup("object", "localhost", portNo);
+        while (true) {
             int i1 = scan.nextInt();
             int i2 = scan.nextInt();
             System.out.println("result: " + stub.add(i1, i2));

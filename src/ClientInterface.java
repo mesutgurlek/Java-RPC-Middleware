@@ -1,6 +1,4 @@
-
-
 public interface ClientInterface {
-	
-	public void handshake();	
+
+    void handshake();
 }

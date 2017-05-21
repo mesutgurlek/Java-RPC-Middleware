@@ -5,5 +5,5 @@ import java.io.Serializable;
  * ${CLASS}
  */
 public enum MessageType implements Serializable {
-    REQUEST, REPLY, CLOSE, ALIVE;
+    REQUEST, REPLY, CLOSE, ALIVE
 }
