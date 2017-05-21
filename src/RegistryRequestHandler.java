@@ -46,6 +46,14 @@ public class RegistryRequestHandler extends Thread {
         return remoteObjectReference;
     }
 
+    public synchronized boolean remove(RegistryMessage message) {
+        String name = message.getName();
+        RemoteObjectReference ror = table.remove(name);
+
+        return ror != null;
+
+    }
+
 
     public synchronized void listAllObjects() {
         System.out.println(table.toString());
@@ -67,6 +75,11 @@ public class RegistryRequestHandler extends Thread {
                     RemoteObjectReference remoteObjectReference1 = lookup(message);
                     outputStream.writeObject(remoteObjectReference1);
                     break;
+                case REMOVE:
+                    boolean result = remove(message);
+                    outputStream.writeObject(result);
+                    break;
+
                 default:
                     System.out.println("Invalid request!");
                     break;

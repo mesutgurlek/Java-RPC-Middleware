@@ -1,7 +1,9 @@
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Constructor;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  * Created by cagri on 16.05.2017.
@@ -125,6 +127,31 @@ public class Naming {
             }
         }
         return skeletonObj;
+    }
+
+    public static void remove(String name, String IP, int portNo) {
+        ObjectOutputStream outputStream = null;
+        ObjectInputStream inputStream = null;
+        Socket registrySocket = null;
+
+        try {
+            registrySocket = new Socket(IP, portNo);
+            // create streams for registry communication
+            outputStream = new ObjectOutputStream(registrySocket.getOutputStream());
+            inputStream = new ObjectInputStream(registrySocket.getInputStream());
+
+            // create a msg to send to registry server
+            RegistryMessage message = new RegistryMessage(RegistryMessageType.REMOVE, name, null, 0);
+            // send msg
+            outputStream.writeObject(message);
+            boolean isRemoved = (boolean)inputStream.readObject();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
 

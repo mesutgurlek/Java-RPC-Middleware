@@ -10,7 +10,7 @@ public class Dispatcher {
         RemoteObjectReference remoteObjectReference = message.getRemoteObjectReference();
         RemoteReferenceModuleServer remoteReferenceModuleServer = RemoteReferenceModuleServer.getServerRemoteReference();
         Object skeleton = remoteReferenceModuleServer.getObjectReference(remoteObjectReference);
-        System.out.println("dispatch: " + skeleton.getClass().toString());
+        //System.out.println("dispatch: " + skeleton.getClass().toString());
         for(Method method: skeleton.getClass().getMethods()){
             if(method.getName().equals(message.getMethodName())){
                 try {
