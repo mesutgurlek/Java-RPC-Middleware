@@ -34,3 +34,5 @@ Finally, run the ClientTest to test Calculator operations:
   > java ClientTest 'objectName' 'registryIPAddress' 'registryPortNo'
   
 Now you can enter 2 numbers to call add function of the object which is located at the server. 
+
+### For more detailed information you can read the report of this project: [Project Report](../master/Report.pdf)
